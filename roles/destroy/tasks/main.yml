@@ -1,0 +1,11 @@
+---
+- name: Delete droplets
+  digital_ocean: state=deleted command=droplet id={{ item }} ssh_key_ids=625455 wait=yes
+  with_items:
+    - 3868294
+    - 3868497
+    - 3868554
+    - 3868623
+    - 3868671
+    - 3868752
+    - 3868760

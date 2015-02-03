@@ -1,0 +1,5 @@
+# Create all machines involved in cluster
+
+- hosts: localhost
+  roles:
+  - spinup

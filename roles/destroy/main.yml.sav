@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Delete droplets
+      digital_ocean: state=deleted command=droplet id={{ item }} ssh_key_ids=625455 wait=yes
+      with_items:
+        - 3757873
+        - 3757880
+        - 3757924
+        - 3757931
+        - 3757944
+        - 3758059
+        - 3758073
+        - 3758089
+        - 3758096
+

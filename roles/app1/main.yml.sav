@@ -1,0 +1,45 @@
+---
+- hosts:
+    - "{{ target_env }}-app1*"
+
+  remote_user: nodemanager
+  sudo: yes
+
+  vars:
+    es:
+      version: 1.4
+    server.port: 8080
+    logging.file: "/var/log/app1"
+
+  tasks:
+    - local_action: git repo="git@github.com:lgueye/app1.git" dest="/tmp" local_action=yes version="0.0.1"
+
+    - name: logstash-forwarder | create certificate dir
+      file: state="directory" dest="/etc/pki/tls/certs"
+
+    - name: logstash-forwarder | create certificate dir
+      copy: src=../logserver/private/logsash-forwarder.crt dest=/etc/pki/tls/certs
+
+    - name: logstash-forwarder | create init script
+      copy: src=logsash-forwarder.init dest=/etc/init.d/logsash-forwarder mode=774
+
+    - name: logstash-forwarder | add repository key
+      apt_key: url=http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+
+    - name: logstash-forwarder | add apt repository
+      apt_repository: repo='deb http://packages.elasticsearch.org/elasticsearch/{{ es.version }}/debian stable main' update_cache=yes
+
+    - name: logstash-forwarder | install
+      apt: pkg=logstash-forwarder state=latest update_cache=yes
+
+    - name: logstash-forwarder | configure
+      template: src=logstash-forwarder.conf.j2 dest=/etc/logstash-forwarder
+      notify: logstash-forwarder | restart
+
+    - name: logstash-forwarder | schedule at restart
+      shell: "update-rc.d logstash-forwarder defaults"
+
+
+  handlers:
+    - name: logstash-forwarder | restart
+      service: name=logstash-forwarder state=restarted

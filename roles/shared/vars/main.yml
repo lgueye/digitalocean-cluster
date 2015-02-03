@@ -1,0 +1,44 @@
+---
+node_management_user: "nodemanager"
+db:
+  ip: "{{ hostvars[groups['db'][0]]['ansible_eth0']['ipv4']['address'] }}"
+  alias: "db"
+  port: 3306
+  admin_user: "root"
+  admin_password: "{{ db_admin_password }}"
+index:
+  ip: "{{ hostvars[groups['index'][0]]['ansible_eth0']['ipv4']['address'] }}"
+  alias: "index"
+  version: "1.4"
+  ports:
+    tcp: 9300
+    http: 9200
+  cluster:
+    name: "appcluster"
+logserver:
+  elasticsearch:
+    ip: "{{ hostvars[groups['logserver'][0]]['ansible_eth0']['ipv4']['address'] }}"
+    alias: "logstore"
+    cluster:
+      name: "logstore"
+    version: "1.4"
+  logstash:
+    ip: "{{ hostvars[groups['logserver'][0]]['ansible_eth0']['ipv4']['address'] }}"
+    alias: "logserver"
+    lumberjack:
+      port: 5500
+  kibana:
+    ip: "{{ hostvars[groups['logserver'][0]]['ansible_eth0']['ipv4']['address'] }}"
+    alias: "logviewer"
+    port: 80
+    version: "3.0.1"
+app1:
+  port: 8080
+  version: "0.0.1"
+  logging.file: "/var/log/app1"
+  db:
+    user: "app1"
+    user_password: "{{ db_user_password }}"
+    name: "app1"
+lb:
+  port: 80

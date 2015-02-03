@@ -1,0 +1,17 @@
+{
+  "network": {
+    "servers": [ {{ logserver.logstash.alias }}: {{ logserver.logstash.lumberjack.port }} ],
+    "timeout": 15,
+    "ssl ca": "/etc/pki/tls/certs/logstash-forwarder.crt"
+  },
+  "files": [
+    {
+      "paths": [
+        "/var/log/syslog",
+        "/var/log/auth.log",
+        "{{ logging.file }}"
+       ],
+      "fields": { "type": "syslog" }
+    }
+   ]
+}

@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://{{ db.alias }}:{{ db.port }}/{{ app1.db.name }}?autoReconnect=true"
+    username: "{{ app1.db.user }}"
+    password: "{{ app1.db.user_password }}"
+    driverClassName: "com.mysql.jdbc.Driver"
+  jpa:
+    database: "MYSQL"
+    show-sql: true
+    hibernate:
+      ddl-auto: "update"
+      dialect: "org.hibernate.dialect.MySQL5Dialect"
+  data:
+    elasticsearch:
+      cluster-nodes: "{{ index.alias }}:{{ index.ports.tcp }}"
+      cluster-name: "{{ index.cluster.name }}"
+  logging:
+    file: {{ logging.file}}
