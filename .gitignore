@@ -1,3 +1,7 @@
 .idea
-inventory
 
+*.iml
+inventory
+*.cache
+digitalocean/*.json
+digitalocean/__init__.py
