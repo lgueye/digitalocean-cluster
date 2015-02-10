@@ -14,5 +14,6 @@ spring:
     elasticsearch:
       cluster-nodes: "{{ index.alias }}:{{ index.ports.tcp }}"
       cluster-name: "{{ index.cluster.name }}"
-  logging:
-    file: {{ logging.file}}
+
+logging:
+  file: {{ logging.file}}
