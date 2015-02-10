@@ -209,7 +209,7 @@ cluster.name: {{ logserver.elasticsearch.cluster.name }}
 
 # Set both 'bind_host' and 'publish_host':
 #
-network.host: localhost
+network.host: {{ logserver.elasticsearch.ip }}
 
 # Set a custom port for the node to node communication (9300 by default):
 #

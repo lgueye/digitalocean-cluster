@@ -7,6 +7,6 @@ input {
   }
 }
 output {
-  elasticsearch { host => localhost }
+  elasticsearch { host => {{ logserver.elasticsearch.ip }} }
   stdout { codec => json }
 }

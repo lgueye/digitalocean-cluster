@@ -13,7 +13,7 @@
 server {
   listen                *:80 ;
 
-  server_name           localhost;
+  server_name           {{ logserver.kibana.ip }};
   access_log            /var/log/nginx/kibana.logserver.access.log;
 
   location / {
@@ -22,23 +22,23 @@ server {
   }
 
   location ~ ^/_aliases$ {
-    proxy_pass http://127.0.0.1:9200;
+    proxy_pass http://{{ logserver.kibana.ip }}:9200;
     proxy_read_timeout 90;
   }
   location ~ ^/.*/_aliases$ {
-    proxy_pass http://127.0.0.1:9200;
+    proxy_pass http://{{ logserver.kibana.ip }}:9200;
     proxy_read_timeout 90;
   }
   location ~ ^/_nodes$ {
-    proxy_pass http://127.0.0.1:9200;
+    proxy_pass http://{{ logserver.kibana.ip }}:9200;
     proxy_read_timeout 90;
   }
   location ~ ^/.*/_search$ {
-    proxy_pass http://127.0.0.1:9200;
+    proxy_pass http://{{ logserver.kibana.ip }}:9200;
     proxy_read_timeout 90;
   }
   location ~ ^/.*/_mapping {
-    proxy_pass http://127.0.0.1:9200;
+    proxy_pass http://{{ logserver.kibana.ip }}:9200;
     proxy_read_timeout 90;
   }
 
