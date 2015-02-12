@@ -1,49 +1,88 @@
 ---
 # Links
 - name: link | link app1 to db
-  lineinfile: dest=/etc/hosts regexp='{{ db.alias }}$' line='{{ db.ip }} {{ db.alias }}' state=absent backup=yes
+  lineinfile: dest="/etc/hosts" regexp="{{ db.alias }}$" line="{{ db.ip }} {{ db.alias }}" state="absent" backup="yes"
 
 - name: link | link app1 to index
-  lineinfile: dest=/etc/hosts regexp='{{ index.alias }}$' line='{{ index.ip }} {{ index.alias }}' state=absent backup=yes
+  lineinfile: dest="/etc/hosts" regexp="{{ index.alias }}$" line="{{ index.ip }} {{ index.alias }}" state="absent" backup="yes"
 
 - name: link | link app1 to logserver
-  lineinfile: dest=/etc/hosts regexp='{{ logserver.logstash.alias }}$' line='{{ logserver.logstash.ip }} {{ logserver.logstash.alias }}' state=absent backup=yes
+  lineinfile: dest="/etc/hosts" regexp="{{ logserver.logstash.alias }}$" line="{{ logserver.logstash.ip }} {{ logserver.logstash.alias }}" state=absent backup=yes
 
 # Logstash forwarder
 - name: logstash-forwarder | create certificate dir
   file: state="directory" dest="/etc/pki/tls/certs"
 
 - name: logstash-forwarder | create certificate dir
-  copy: src=../logserver/private/logsash-forwarder.crt dest=/etc/pki/tls/certs
+  copy: src="../logserver/private/logsash-forwarder.crt" dest="/etc/pki/tls/certs"
 
 - name: logstash-forwarder | create init script
-  copy: src=logsash-forwarder.init dest=/etc/init.d/logsash-forwarder mode=774
+  copy: src="logsash-forwarder.init" dest="/etc/init.d/logsash-forwarder" mode="774"
 
 - name: logstash-forwarder | add repository key
-  apt_key: url=http://packages.elasticsearch.org/GPG-KEY-elasticsearch
+  apt_key: url="http://packages.elasticsearch.org/GPG-KEY-elasticsearch"
 
 - name: logstash-forwarder | add apt repository
-  apt_repository: repo='deb http://packages.elasticsearch.org/elasticsearch/{{ logserver.elasticsearch.version }}/debian stable main' update_cache=yes
+  apt_repository: repo="deb http://packages.elasticsearch.org/elasticsearch/{{ logserver.elasticsearch.version }}/debian stable main" update_cache="yes"
 
 - name: logstash-forwarder | install
-  apt: pkg=logstash-forwarder state=latest update_cache=yes
+  apt: pkg="logstash-forwarder" state="latest" update_cache="yes"
 
 - name: logstash-forwarder | configure
-  template: src=logstash-forwarder.conf.j2 dest=/etc/logstash-forwarder
+  template: src="logstash-forwarder.conf.j2" dest="/etc/logstash-forwarder"
   notify: logstash-forwarder | restart
 
 - name: logstash-forwarder | schedule at restart
   shell: "update-rc.d logstash-forwarder defaults"
 
 # Clone app with version xxx
-- name: package application | clone
-  local_action: git repo="git@github.com:lgueye/app1.git" dest="/tmp" local_action=yes version="{{ app1.version }}"
+- name: application | clone
+  local_action: git repo="{{ app1.repo }}" dest="{{ app1.clonedir }}" local_action="yes" version="{{ app1.version }}"
 
-- name: package application | package
-- local_action: shell "cd {{ workdir }}/app1 && mvn clean package"
+- name: application | package
+  local_action: shell "mvn clean package -f {{ app1.clonedir }}/app1/pom.xml"
 
-- name: package application | remote dir
-  file: dest="/opt/app1/{{ app1.version }}" state="present"
+- name: db-upgrader | configure
+  local_action: template src="db-upgrader.properties.j2" dest="{{ app1.clonedir }}/app1/db-upgrader"
 
-- name: package application | remote dir
-  file: dest="/opt/app1/{{ app1.version }}"
+- name: db-upgrader | run
+  local_action: shell "java -jar {{ app1.clonedir }}/app1/db-upgrader/target/db-upgrader.jar --spring.config.location={{ app1.clonedir }}/app1/db-upgrader/ --spring.config.name=db-upgrader"
+
+- name: index-upgrader | configure
+  local_action: template src="index-upgrader.properties.j2" dest="{{ app1.clonedir }}/app1/index-upgrader"
+
+- name: index-upgrader | run
+  local_action: shell "java -jar {{ app1.clonedir }}/app1/index-upgrader/target/index-upgrader.jar --spring.config.location={{ app1.clonedir }}/app1/index-upgrader/ --spring.config.name=index-upgrader"
+
+- name: application | create deploy dir
+  file: state="directory" dest="/opt/java-apps/app1/{{ app1.version }}"
+
+- name: application | create deploy dir
+  file: state="directory" dest="/opt/java-apps/app1/{{ app1.version }}"
+
+- name: application | configure
+  template: src=app1.yml.j2 dest="/opt/java-apps/app1/{{ app1.version }}"
+
+- name: application | copy
+  file: src="{{ app1.clonedir }}/app1/api/target/app1-api.jar" dest="/opt/java-apps/app1/{{ app1.version }}"
+
+- name: application | stop
+  shell: "curl -XPOST http://localhost:{{ app1.management.port }}/shutdown"
+  ignore_errors: yes
+
+- name: application | unlink
+  shell: "rm -fr /opt/app1"
+  ignore_errors: yes
+
+- name: application | link
+  shell: "ln -s /opt/java-apps/app1/{{ app1.version }} /opt/app1"
+
+- name: application | run
+  shell: "java -jar /opt/app1/app1-api.jar --spring.config.location=/opt/app1/ --spring.config.name=app1"
+
+- name: app1-tests | configure
+  local_action: template src="app1-tests.properties.j2" dest="{{ app1.clonedir }}/app1/tests"
+
+- name: app1-tests | run
+  local_action: shell "mvn verify -Prun-tests -f {{ app1.clonedir }}/app1/tests/pom.xml"
+

@@ -36,9 +36,17 @@ app1:
   port: 8080
   version: "0.0.1"
   logging.file: "/var/log/app1"
+  repo: "git@github.com:lgueye/app1.git"
+  clonedir: "/tmp"
   db:
     user: "app1"
     user_password: "{{ db_user_password }}"
     name: "app1"
+    driver: "com.mysql.jdbc.Driver"
+    url: "jdbc:mysql://{{ db.alias }}:{{ db.port }}/{{ app1.db.name }}?autoReconnect=true"
+
+app11:
+  ip: "{{ hostvars[groups['app1-1'][0]]['ansible_eth0']['ipv4']['address'] }}"
+
 lb:
   port: 80

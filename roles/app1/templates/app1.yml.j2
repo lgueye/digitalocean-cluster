@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: "jdbc:mysql://{{ db.alias }}:{{ db.port }}/{{ app1.db.name }}?autoReconnect=true"
+    url: "{{ app1.db.url }}"
     username: "{{ app1.db.user }}"
     password: "{{ app1.db.user_password }}"
-    driverClassName: "com.mysql.jdbc.Driver"
+    driverClassName: "{{ app1.db.driver }}"
   jpa:
     database: "MYSQL"
-    show-sql: true
+    show-sql: "true"
     hibernate:
       ddl-auto: "update"
       dialect: "org.hibernate.dialect.MySQL5Dialect"
@@ -16,4 +16,7 @@ spring:
       cluster-name: "{{ index.cluster.name }}"
 
 logging:
-  file: {{ logging.file}}
+  file: "{{ logging.file}}"
+
+management:
+  port: "{{ app1.management.port }}"

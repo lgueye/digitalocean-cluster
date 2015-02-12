@@ -1,23 +1,22 @@
 # Configures the whole cluster
 ---
 
-# Not needed, invoked by utils
 #- hosts: all
 #  remote_user: root
 #  roles:
 #  - security
 
-#- hosts: db
-#  remote_user: "{{ node_management_user }}"
-#  sudo: yes
-#  roles:
-#  - app1db
-#
-#- hosts: index
-#  remote_user: "{{ node_management_user }}"
-#  sudo: yes
-#  roles:
-#  - index
+- hosts: db
+  remote_user: "{{ node_management_user }}"
+  sudo: yes
+  roles:
+  - app1db
+
+- hosts: index
+  remote_user: "{{ node_management_user }}"
+  sudo: yes
+  roles:
+  - index
 
 - hosts: logserver
   remote_user: "{{ node_management_user }}"
@@ -25,12 +24,11 @@
   roles:
   - logserver
 
-#- hosts: app1*
-#  remote_user: "{{ node_management_user }}"
-#  sudo: yes
-#  roles:
-#  - java
-#  - app1
+- hosts: app1*
+  remote_user: "{{ node_management_user }}"
+  sudo: yes
+  roles:
+  - app1
 
 #- hosts: lb
 #  remote_user: "{{ node_management_user }}"
