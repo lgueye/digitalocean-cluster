@@ -1,6 +1,6 @@
 ---
-nginx:
-  root: "/var/www/kibana3"
-kibana:
-  version: "3.0.1"
-workdir: "/tmp"
+#nginx:
+#  root: "/var/www/kibana3"
+#kibana:
+#  version: "3.0.1"
+#workdir: "/tmp"

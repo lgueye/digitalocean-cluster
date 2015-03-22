@@ -1,3 +1,0 @@
----
-logging.file: "/var/log/app1.log"
-management.port: 8081

@@ -8,15 +8,19 @@ spring:
     database: "MYSQL"
     show-sql: "true"
     hibernate:
-      ddl-auto: "update"
+      ddl-auto: "none"
       dialect: "org.hibernate.dialect.MySQL5Dialect"
   data:
     elasticsearch:
-      cluster-nodes: "{{ index.alias }}:{{ index.ports.tcp }}"
+      cluster-nodes: "{{ index.ip }}:{{ index.ports.tcp }}"
       cluster-name: "{{ index.cluster.name }}"
 
 logging:
-  file: "{{ logging.file}}"
+  file: "{{ app1.logging_file}}"
 
 management:
   port: "{{ app1.management.port }}"
+
+endpoints:
+  shutdown:
+    enabled: true

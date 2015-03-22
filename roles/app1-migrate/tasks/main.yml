@@ -1,0 +1,40 @@
+---
+# Clone app
+- name: application | delete clonedir
+  local_action: command rm -fr {{ app1.clonedir }}/app1
+  sudo: no
+  ignore_errors: yes
+
+- name: application | clone
+  local_action: git repo="{{ app1.repo }}" dest="{{ app1.clonedir }}/app1"
+  sudo: no
+  ignore_errors: yes
+
+- name: application | package
+  local_action: command mvn clean package -f {{ app1.clonedir }}/app1/pom.xml
+  sudo: no
+
+- name: db-upgrader | configure
+  local_action: template src="db-upgrader.properties.j2" dest="{{ app1.clonedir }}/app1/db-upgrader/app1-db-upgrader.properties"
+  sudo: no
+
+- name: db-upgrader | run
+  local_action: command java -jar {{ app1.clonedir }}/app1/db-upgrader/target/app1-db-upgrader.jar --spring.config.location={{ app1.clonedir }}/app1/db-upgrader/ --spring.config.name=app1-db-upgrader
+  sudo: no
+
+- name: index-upgrader | configure
+  local_action: template src="index-upgrader.properties.j2" dest="{{ app1.clonedir }}/app1/index-upgrader/app1-index-upgrader.properties"
+  sudo: no
+
+- name: index-upgrader | run
+  local_action: command java -jar {{ app1.clonedir }}/app1/index-upgrader/target/app1-index-upgrader.jar --spring.config.location={{ app1.clonedir }}/app1/index-upgrader/ --spring.config.name=app1-index-upgrader
+  sudo: no
+
+- name: application | configure
+  local_action: template src=app1-api.yml.j2 dest="{{ app1.clonedir }}/app1/api/app1-api.yml"
+  sudo: no
+
+- name: logback | configure
+  local_action: template src="logback.xml.j2" dest="{{ app1.clonedir }}/app1/api/logback.xml"
+  sudo: no
+

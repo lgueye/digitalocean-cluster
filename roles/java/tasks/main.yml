@@ -11,5 +11,5 @@
   sudo: yes
 
 - name: java | install jdk 8
-  apt: name=oracle-java8-installer state=latest update-cache=yes force=yes
+  apt: name=oracle-java8-installer state=present update-cache=yes force=yes
   sudo: yes

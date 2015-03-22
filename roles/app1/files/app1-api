@@ -1,0 +1,10 @@
+#!/bin/bash
+# description: app1-api start stop restart
+# processname: app1-api
+# chkconfig: 234 20 80
+
+. /opt/app1-api/app1-api.sh
+
+/opt/app1-api/spring-boot-service.sh $1
+
+exit 0

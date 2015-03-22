@@ -6,11 +6,11 @@
   apt_repository: repo='deb http://packages.elasticsearch.org/elasticsearch/{{ index.version }}/debian stable main' update_cache=yes
 
 - name: elasticsearch | install
-  apt: pkg=elasticsearch state=latest update_cache=yes
+  apt: pkg=elasticsearch state=present update_cache=yes
 
 - name: elasticsearch | configure
   template: src=elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
   notify: elasticsearch | restart
 
 - name: elasticsearch | ensure service is running
-  service: name=elasticsearch state=started
+  service: name=elasticsearch state=restarted

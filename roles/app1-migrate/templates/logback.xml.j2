@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.diveintojee" level="DEBUG"/>
+    <appender name="RSYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost><host>{{ logserver.rsyslog.ip }}</syslogHost>
+        <port>{{ logserver.rsyslog.port }}</port>
+        <facility>USER</facility>
+        <suffixPattern>app1: %logger %msg</suffixPattern>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="RSYSLOG"/>
+    </root>
+
+</configuration>
