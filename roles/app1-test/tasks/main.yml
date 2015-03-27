@@ -3,10 +3,6 @@
   local_action: template src="app1-tests.properties.j2" dest="{{ app1.clonedir }}/app1/tests/app1-tests.properties"
   sudo: no
 
-- name: app1-tests | wait
-  local_action: command mvn verify -Prun-tests -f {{ app1.clonedir }}/app1/tests/pom.xml
-  sudo: no
-
 - name: app1-tests | run
   local_action: command mvn verify -Prun-tests -f {{ app1.clonedir }}/app1/tests/pom.xml
   sudo: no
