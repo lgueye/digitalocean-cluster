@@ -23,7 +23,7 @@
   ignore_errors: yes
 
 - name: application | link
-  fila: state="link" src="/opt/java-apps/app1-api/{{ git_rev.stdout }}" dest="/opt/app1-api"
+  file: state="link" src="/opt/java-apps/app1-api/{{ git_rev.stdout }}" dest="/opt/app1-api"
 #  shell: "ln -s /opt/java-apps/app1-api/{{ git_rev.stdout }} /opt/app1-api"
 
 - name: application | copy jar
@@ -36,13 +36,13 @@
   copy: src="{{ app1.clonedir }}/app1/api/logback.xml" dest="/opt/app1-api/"
 
 - name: unix service | copy config
-  template: src="app1-api.sh.j2" dest="/opt/app1-api/app1-api.sh"
+  template: src="app1-api.sh.j2" dest="/opt/app1-api/app1-api.sh" mode="u=xrw,g=xr,o=r"
 
 - name: unix service | copy spring boot management script
-  copy: src="spring-boot-service.sh" dest="/opt/app1-api/"
+  template: src="spring-boot-service.sh.j2" dest="/opt/app1-api/spring-boot-service.sh" mode="u=xrw,g=xr,o=r"
 
 - name: unix service | copy init script
-  copy: src="app1-api" dest="/etc/init.d/"
+  copy: src="app1-api" dest="/etc/init.d/" mode="u=xrw,g=xr,o=r"
 
 - name: application | ensure service is running
   service: name="app1-api" state="restarted"
