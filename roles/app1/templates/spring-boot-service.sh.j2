@@ -14,8 +14,11 @@ function start {
     fi
     echo "Starting application..."
     nohup java -jar $APP_HOME/$APP_NAME.jar \
-        --spring.config.location=file:$APP_HOME/config/   \
-        < /dev/null > $APP_HOME/logs/app.log 2>&1 &
+        --spring.config.location=$APP_HOME/   \
+        --spring.config.name=$APP_NAME   \
+        --spring.logging.config=$APP_HOME/logback.xml   \
+        --spring.pidfile={{ app1.pidfile }}   \
+        < /dev/null > /tmp/$APP_NAME.log 2>&1 &
 }
 
 function stop {
