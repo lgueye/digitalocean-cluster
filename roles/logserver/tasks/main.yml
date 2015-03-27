@@ -1,7 +1,7 @@
 ---
 # Links
-- name: link | link logserver to rsyslog
-  lineinfile: dest=/etc/hosts regexp='{{ logserver.rsyslog.alias }}$' line='{{ logserver.rsyslog.ip }} {{ logserver.rsyslog.alias }}' state=present backup=yes
+#- name: link | link logserver to rsyslog
+#  lineinfile: dest=/etc/hosts regexp='{{ logserver.rsyslog.alias }}$' line='{{ logserver.rsyslog.ip }} {{ logserver.rsyslog.alias }}' state=present backup=yes
 
 #- name: link | link logserver to logstash
 #  lineinfile: dest=/etc/hosts regexp='{{ logserver.logstash.alias }}$' line='{{ logserver.logstash.ip }} {{ logserver.logstash.alias }}' state=present backup=yes
