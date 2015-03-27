@@ -7,7 +7,7 @@
         <syslogHost><host>{{ logserver.rsyslog.ip }}</syslogHost>
         <port>{{ logserver.rsyslog.port }}</port>
         <facility>USER</facility>
-        <suffixPattern>app1: %logger %msg</suffixPattern>
+        <suffixPattern>app1-api: %logger %msg</suffixPattern>
     </appender>
     <root level="INFO">
         <appender-ref ref="FILE"/>

@@ -40,11 +40,10 @@ app1:
   port: 8080
   management:
     port: 8081
-  version: "0.0.1"
-  logging_file: "/var/log/app1"
+  logging_file: "/var/log/app1-api"
   repo: "https://github.com/lgueye/app1.git"
   clonedir: "/tmp"
-  pidfile: "/var/run/app1.pid"
+  pidfile: "/var/run/app1-api.pid"
   db:
     user: "app1"
     user_password: "{{ db_user_password }}"
