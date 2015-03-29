@@ -19,12 +19,10 @@
 
 - name: application | unlink
   file: state="absent" dest="/opt/app1-api"
-#  shell: "rm -fr /opt/app1-api"
   ignore_errors: yes
 
 - name: application | link
   file: state="link" src="/opt/java-apps/app1-api/{{ git_rev.stdout }}" dest="/opt/app1-api"
-#  shell: "ln -s /opt/java-apps/app1-api/{{ git_rev.stdout }} /opt/app1-api"
 
 - name: application | copy jar
   copy: src="{{ app1.clonedir }}/app1/api/target/app1-api.jar" dest="/opt/app1-api/"
