@@ -16,22 +16,6 @@ index:
   cluster:
     name: "appcluster"
 logserver:
-#  elasticsearch:
-#    ip: "{{ hostvars[groups['logserver'][0]]['ansible_eth0']['ipv4']['address'] }}"
-#    alias: "logstore"
-#    cluster:
-#      name: "logstore"
-#    version: "1.4"
-#  logstash:
-#    ip: "{{ hostvars[groups['logserver'][0]]['ansible_eth0']['ipv4']['address'] }}"
-#    alias: "logserver"
-#    lumberjack:
-#      port: 5500
-#  kibana:
-#    ip: "{{ hostvars[groups['logserver'][0]]['ansible_eth0']['ipv4']['address'] }}"
-#    alias: "logviewer"
-#    port: 80
-#    version: "3.0.1"
   rsyslog:
     port: 514
     ip: "{{ hostvars[groups['logserver'][0]]['ansible_eth0']['ipv4']['address'] }}"
@@ -56,3 +40,4 @@ app11:
 
 lb:
   port: 80
+  ip: "{{ hostvars[groups['lb'][0]]['ansible_eth0']['ipv4']['address'] }}"
