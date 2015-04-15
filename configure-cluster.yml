@@ -1,47 +1,47 @@
 # Configures the whole cluster
 ---
 
-- hosts: all
-  remote_user: root
+- hosts: "all"
+  remote_user: "root"
   roles:
-  - security
+  - "security"
 
-- hosts: db
+- hosts: "db"
   remote_user: "{{ node_management_user }}"
-  sudo: yes
+  sudo: "yes"
   roles:
-  - app1db
+  - "app1db"
 
-- hosts: index
+- hosts: "index"
   remote_user: "{{ node_management_user }}"
-  sudo: yes
+  sudo: "yes"
   roles:
-  - index
+  - "index"
 
-- hosts: logserver
+- hosts: "logserver"
   remote_user: "{{ node_management_user }}"
-  sudo: yes
+  sudo: "yes"
   roles:
-  - logserver
+  - "logserver"
 
-- hosts: localhost
-  sudo: false
+- hosts: "localhost"
+  sudo: "false"
   roles:
-  - app1-migrate
+  - "app1-migrate"
 
-- hosts: app1*
+- hosts: "app1*"
   remote_user: "{{ node_management_user }}"
-  sudo: yes
+  sudo: "yes"
   roles:
-  - app1
+  - "app1"
 
-- hosts: localhost
-  sudo: false
+- hosts: "localhost"
+  sudo: "false"
   roles:
-  - app1-test
+  - "app1-test"
 
-#- hosts: lb
-#  remote_user: "{{ node_management_user }}"
-#  sudo: yes
-#  roles:
-#  - lb
+- hosts: "lb"
+  remote_user: "{{ node_management_user }}"
+  sudo: "yes"
+  roles:
+   - "lb"
