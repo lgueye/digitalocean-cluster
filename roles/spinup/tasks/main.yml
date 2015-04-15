@@ -4,12 +4,9 @@
   with_items:
     - "{{ target_env }}-db"
     - "{{ target_env }}-index"
-#        - "{{ target_env }}-lb
-- name: Create app1 Droplets
+    - "{{ target_env }}-logserver"
+    - "{{ target_env }}-lb"
+
+- name: Create app1 Droplets (2G)
   digital_ocean: state=active command=droplet name={{ item }} size_id=62 region_id=2 image_id=9801950 ssh_key_ids=625455 wait=yes unique_name=yes
   with_sequence: start=1 end=2 format="{{ target_env }}-app1-%d"
-
-- name: Create 4G Droplets
-  digital_ocean: state=active command=droplet name={{ item }} size_id=64 region_id=2 image_id=9801950 ssh_key_ids=625455 wait=yes unique_name=yes
-  with_items:
-    - "{{ target_env }}-logserver"
