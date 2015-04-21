@@ -4,19 +4,15 @@ galaxy_info:
   description: An Ansible role for installing load balancer.
 
 dependencies:
-  - { role: "utils" }
-  - { role: "info.haproxy",
-        haproxy_frontends: {
-          name: 'app1-api-frontend',
-          ip: "{{ lb.ip }}",
-          port: "{{ lb.port }}",
-          maxconn: '1000',
-          default_backend: 'app1-api-backend'
-        },
-        haproxy_backends: {
-          name: 'app1-api-backend',
-          description: 'app1-api',
-          servers:
-              - name: "{% for g in groups.app1 %}{{ g.hostname }}, {% endfor %}" ip: "{% for g in groups.app1 %}{{ g.ansible_eth0.ipv4.address }} {% endfor %}" port: "{{ app1.port }}"
-        }
-    }
+  - role: "utils"
+  - role: "info.haproxy"
+    haproxy_frontends:
+    - name: 'app1-api-frontend'
+      ip: "{{ lb.ip }}"
+      port: "{{ lb.port }}"
+      maxconn: '1000'
+      default_backend: 'app1-api-backend'
+    haproxy_backends:
+    - name: 'app1-api-backend'
+      description: 'app1-api'
+      servers: [{name: "app1-1",ip: "{{ hostvars[groups['app1-1'][0]]['ansible_eth0']['ipv4']['address'] }}", port: "{{ app1.port }}"}, {name: "app1-2", ip: "{{ hostvars[groups['app1-2'][0]]['ansible_eth0']['ipv4']['address'] }}", port: "{{ app1.port }}"}]
