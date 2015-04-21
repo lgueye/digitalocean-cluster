@@ -17,7 +17,6 @@ function start {
         --spring.config.location=$APP_HOME/   \
         --spring.config.name=$APP_NAME   \
         --spring.logging.config=$APP_HOME/logback.xml   \
-        --spring.pidfile={{ app1.pidfile }}   \
         < /dev/null > /tmp/$APP_NAME.log 2>&1 &
 }
 
@@ -30,20 +29,7 @@ function stop {
 
     # First, we will try to trigger a controlled shutdown using
     # spring-boot-actuator
-    curl -X POST http://localhost:$APP_PORT/shutdown < /dev/null > /dev/null 2>&1
-
-    # Wait until the server process has shut down
-    attempts=0
-    while pkill -0 -f $APP_NAME.jar > /dev/null 2>&1
-    do
-        attempts=$[$attempts + 1]
-        if [ $attempts -gt 5 ]
-        then
-            # We have waited too long. Kill it.
-            pkill -f $APP_NAME.jar > /dev/null 2>&1
-        fi
-        sleep 1s
-    done
+    curl -X POST http://localhost:$APP_PORT/shutdown
 }
 
 case $1 in
