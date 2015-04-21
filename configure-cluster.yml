@@ -35,13 +35,14 @@
   roles:
   - "app1"
 
-- hosts: "localhost"
-  sudo: "false"
-  roles:
-  - "app1-test"
-
 - hosts: "lb"
   remote_user: "{{ node_management_user }}"
   sudo: "yes"
   roles:
    - "lb"
+
+- hosts: "localhost"
+  sudo: "false"
+  roles:
+  - "app1-test"
+
