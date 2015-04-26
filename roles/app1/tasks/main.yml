@@ -14,33 +14,46 @@
   sudo: no
   register: "git_rev"
 
+- name: application | register stats
+  stat: path="/opt/java-apps/app1-api/{{ git_rev.stdout }}/app1-api.jar"
+  register: "target_app_stats"
+
 - name: application | create deploy dir
   file: state="directory" dest="/opt/java-apps/app1-api/{{ git_rev.stdout }}"
+  when: target_app_stats.stat.exists == False
 
 - name: application | unlink
   file: state="absent" dest="/opt/app1-api"
-  ignore_errors: yes
+  when: target_app_stats.stat.exists == False
 
 - name: application | link
   file: state="link" src="/opt/java-apps/app1-api/{{ git_rev.stdout }}" dest="/opt/app1-api"
+  when: target_app_stats.stat.exists == False
 
 - name: application | copy jar
   copy: src="{{ app1.clonedir }}/app1/api/target/app1-api.jar" dest="/opt/app1-api/"
+  when: target_app_stats.stat.exists == False
 
 - name: application | copy app config
   copy: src="{{ app1.clonedir }}/app1/api/app1-api.yml" dest="/opt/app1-api/"
+  when: target_app_stats.stat.exists == False
 
 - name: application | copy log config
   copy: src="{{ app1.clonedir }}/app1/api/logback.xml" dest="/opt/app1-api/"
+  when: target_app_stats.stat.exists == False
 
 - name: unix service | copy config
   template: src="app1-api.sh.j2" dest="/opt/app1-api/app1-api.sh" mode="u=xrw,g=xr,o=r"
+  when: target_app_stats.stat.exists == False
 
 - name: unix service | copy spring boot management script
   template: src="spring-boot-service.sh.j2" dest="/opt/app1-api/spring-boot-service.sh" mode="u=xrw,g=xr,o=r"
+  when: target_app_stats.stat.exists == False
 
 - name: unix service | copy init script
   copy: src="app1-api" dest="/etc/init.d/" mode="u=xrw,g=xr,o=r"
+  when: target_app_stats.stat.exists == False
 
-- name: application | ensure service is running
-  service: name="app1-api" state="restarted"
+- name: application | ensure service is restarted
+  service: name="app1-api" state="restarted" sleep="3"
+  when: target_app_stats.stat.exists == False
