@@ -8,7 +8,7 @@ dependencies:
   - role: "info.haproxy"
     haproxy_frontends:
     - name: 'app1-api-frontend'
-      ip: "{{ lb.ip }}"
+      ip: "0.0.0.0"
       port: "{{ lb.port }}"
       maxconn: '1000'
       default_backend: 'app1-api-backend'
