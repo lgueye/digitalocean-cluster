@@ -4,7 +4,7 @@
     <logger name="org.springframework.web" level="INFO"/>
     <logger name="org.diveintojee" level="DEBUG"/>
     <appender name="RSYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
-        <syslogHost><host>{{ logserver.rsyslog.ip }}</syslogHost>
+        <syslogHost>{{ logserver.rsyslog.ip }}</syslogHost>
         <port>{{ logserver.rsyslog.port }}</port>
         <facility>USER</facility>
         <suffixPattern> app1-api:%-10t|%-5p|%c{40}: %m</suffixPattern>
