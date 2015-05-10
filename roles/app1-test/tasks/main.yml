@@ -1,15 +1,12 @@
 ---
 - name: app1-tests | configure
-  local_action: template src="app1-tests.properties.j2" dest="{{ app1.clonedir }}/app1/tests/app1-tests.properties"
-  sudo: no
+  template: src="app1-tests.properties.j2" dest="{{ app1.clonedir }}/app1/tests/app1-tests.properties"
 
 - name: app1-tests | wait 20 s
-  local_action: pause seconds=20
-  sudo: no
+  pause: seconds="20"
 
 - name: app1-tests | run
-  sudo: no
-  local_action: shell mvn verify -Prun-tests
+  shell: "mvn verify -Prun-tests"
   args:
     chdir: "{{ app1.clonedir }}/app1/tests"
 

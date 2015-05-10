@@ -25,7 +25,7 @@
   - "logserver"
 
 - hosts: "localhost"
-  sudo: "false"
+  connection: "local"
   roles:
   - "app1-migrate"
 
@@ -42,7 +42,7 @@
    - "lb"
 
 - hosts: "localhost"
-  sudo: "false"
+  connection: "local"
   roles:
   - "app1-test"
 
