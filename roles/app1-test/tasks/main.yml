@@ -6,7 +6,7 @@
   pause: seconds="20"
 
 - name: app1-tests | run
-  shell: "mvn verify -Prun-tests"
+  shell: mvn verify -Prun-tests
   args:
     chdir: "{{ app1.clonedir }}/app1/tests"
 

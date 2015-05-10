@@ -1,13 +1,3 @@
-#---
-#- name: logstash | restart
-#  service: name=logstash state=restarted
-#
-#- name: elasticsearch | restart
-#  service: name=elasticsearch state=restarted
-#
-#- name: nginx | restart
-#  service: name=nginx state=restarted
-
 ---
 - name: Restart rsyslog
-  service: name=rsyslog state=restarted
+  service: name="rsyslog" state="restarted"
