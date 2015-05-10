@@ -6,5 +6,7 @@
 
 - name: "rsyslog | config"
   template: src="rsyslog.conf.j2" dest="/etc/rsyslog.conf" owner="root" group="root" mode="0644" backup="yes"
-  notify: "Restart rsyslog"
+  notify: Restart rsyslog
 
+#- name: "rsyslog | restart service"
+#  service: name=rsyslog state=restarted

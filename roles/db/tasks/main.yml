@@ -15,8 +15,7 @@
 
 - name: interpolate my.cnf server configuration
   template: src=my.cnf.j2 dest=/etc/mysql/my.cnf owner=root group=root mode=0600
-  notify: restart mysql
 
 - name: ensure service has been restarted
-  service: name=mysql state=restarted
+  service: name=mysql state=restarted sleep="1"
 
